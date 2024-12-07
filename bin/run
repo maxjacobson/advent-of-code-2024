@@ -1,0 +1,56 @@
+#!/bin/sh
+
+PATH="node_modules/.bin:$PATH"
+
+set -e
+
+usage() {
+  cat <<'EOM'
+Usage: run [-rh] [--] <PROBLEM>
+Run problems
+
+Options:
+  -r            Use the real input instead of the example input
+  -h            Show this help
+
+Arguments:
+  PROBLEM         Which problem to run
+
+EOM
+}
+
+real=0
+
+while getopts r:h opt; do
+  case "$opt" in
+    r)
+      real=1
+      ;;
+    h)
+      usage
+      exit 0
+      ;;
+    \?)
+      usage >&2
+      exit 64
+      ;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+if [ $# -eq 0 ]; then
+  echo "At least one problem is required" >&2
+  usage >&2
+  exit 64
+fi
+
+tsc
+
+for problem in "$@"; do
+  if [ "$real" -ne 1 ]; then
+    node "dist/$problem.js" "inputs/$problem.example.txt"
+  else
+    node "dist/$problem.js" "inputs/$problem.real.txt"
+  fi
+done
