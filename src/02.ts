@@ -60,6 +60,38 @@ const countSafe = (reports: Report[]): number => {
   return result;
 };
 
+const reportsWithEachLevelRemoved = (report: Report): Report[] => {
+  const alts = [];
+
+  for (let i = 0; i < report.length; i++) {
+    const alt = report.slice();
+    alt.splice(i, 1);
+
+    alts.push(alt);
+  }
+
+  return alts;
+};
+
+const countSafeWithDampener = (reports: Report[]): number => {
+  let result = 0;
+
+  reports.forEach((report) => {
+    if (isSafe(report)) {
+      result += 1;
+    } else {
+      const alts: Report[] = reportsWithEachLevelRemoved(report);
+
+      if (alts.some((alt) => isSafe(alt))) {
+        result += 1;
+      }
+    }
+  });
+
+  return result;
+};
+
 const reports: Report[] = parseAsReports(input);
 
 console.log("Part one:", countSafe(reports));
+console.log("Part one:", countSafeWithDampener(reports));
