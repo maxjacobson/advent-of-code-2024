@@ -42,10 +42,21 @@ const sumOfDistances = (pairs) => {
 
   return sum;
 };
+const similarityScore = (left: number[], right: number[]): number => {
+  let score = 0;
+
+  left.forEach((leftNum) => {
+    right.forEach((rightNum) => {
+      if (leftNum === rightNum) {
+        score += leftNum;
+      }
+    });
+  });
+
+  return score;
+};
 
 const { left, right } = parseAsLists(input);
 
-const pairs = sortedPairs(left, right);
-const sum = sumOfDistances(pairs);
-
-console.log("Part one:", sum);
+console.log("Part one:", sumOfDistances(sortedPairs(left, right)));
+console.log("Part two:", similarityScore(left, right));
