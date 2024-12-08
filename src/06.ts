@@ -108,3 +108,30 @@ const countVisited = (map: Map): number => {
 
   console.log("Part one:", countVisited(map));
 }
+
+{
+  let count = 0;
+
+  const [map] = parse(input);
+
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[y].length; x++) {
+      if (map[y][x] === ".") {
+        const [copy, guard] = parse(input);
+        copy[y][x] = "#";
+
+        try {
+          patrol(copy, guard);
+        } catch (e: unknown) {
+          if (e instanceof RangeError) {
+            count++;
+          } else {
+            throw e;
+          }
+        }
+      }
+    }
+  }
+
+  console.log("Part two:", count);
+}
