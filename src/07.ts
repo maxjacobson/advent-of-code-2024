@@ -20,7 +20,7 @@ const parse = (input: string): Equation[] => {
 
 const equations: Equation[] = parse(input);
 
-const computePossibilities = (
+const computePossibilitiesPartOne = (
   equation: Equation,
   { value, idx, results }: { value: number; idx: number; results: number[] },
 ): number[] => {
@@ -31,12 +31,12 @@ const computePossibilities = (
     results.push(value + nextValue);
 
     return results.concat(
-      computePossibilities(equation, {
+      computePossibilitiesPartOne(equation, {
         value: value * nextValue,
         idx: idx + 1,
         results: results,
       }),
-      computePossibilities(equation, {
+      computePossibilitiesPartOne(equation, {
         value: value + nextValue,
         idx: idx + 1,
         results: results,
@@ -47,8 +47,8 @@ const computePossibilities = (
   }
 };
 
-const possiblyTrue = (equation: Equation): boolean => {
-  const allResults = computePossibilities(equation, {
+const possiblyTruePartOne = (equation: Equation): boolean => {
+  const allResults = computePossibilitiesPartOne(equation, {
     value: equation.calibrationEquation[0],
     idx: 1,
     results: [],
@@ -60,7 +60,7 @@ const possiblyTrue = (equation: Equation): boolean => {
 console.log(
   "Problem one:",
   equations
-    .filter((equation) => possiblyTrue(equation))
+    .filter((equation) => possiblyTruePartOne(equation))
     .map((equation) => equation.testValue)
     .reduce((sum, num) => sum + num, 0),
 );
