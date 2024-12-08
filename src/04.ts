@@ -58,6 +58,51 @@ const countInstancesOf = (wordSearch: WordSearch, word: string): number => {
   return result;
 };
 
+const reverse = (word: string): string => {
+  const result = [];
+
+  for (let i = word.length; i >= 0; i--) {
+    result.push(word[i]);
+  }
+
+  return result.join("");
+};
+
+const countInstancesOfCrosses = (
+  wordSearch: WordSearch,
+  word: string,
+): number => {
+  let result = 0;
+  const reversed = reverse(word);
+
+  for (let y = 0; y < wordSearch.length; y++) {
+    for (let x = 0; x < wordSearch[y].length; x++) {
+      const found =
+        scan(wordSearch, word, x, y, 1, 1) ||
+        scan(wordSearch, reversed, x, y, 1, 1);
+
+      if (found) {
+        const otherWay = scan(wordSearch, word, x, y + word.length - 1, 1, -1);
+        const otherWayReversed = scan(
+          wordSearch,
+          reversed,
+          x,
+          y + word.length - 1,
+          1,
+          -1,
+        );
+
+        if (otherWay || otherWayReversed) {
+          result++;
+        }
+      }
+    }
+  }
+
+  return result;
+};
+
 const wordSearch: WordSearch = parseAsWordSearch(input);
 
 console.log("Part one: ", countInstancesOf(wordSearch, "XMAS"));
+console.log("Part two:", countInstancesOfCrosses(wordSearch, "MAS"));
