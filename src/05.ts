@@ -1,4 +1,3 @@
-import { sum } from "./helpers/math";
 import { readInput } from "./helpers/read-input";
 
 const input = readInput();
@@ -31,10 +30,6 @@ const middlePage = (update: Update): number => {
   return update[Math.floor(update.length / 2)];
 };
 
-const middlePages = (updates: Update[]): number[] => {
-  return updates.map(middlePage);
-};
-
 const isCorrectlyOrdered = (rules: Rule[], update: Update): boolean => {
   for (const [a, b] of rules) {
     const indexOfA = update.indexOf(a);
@@ -49,9 +44,40 @@ const isCorrectlyOrdered = (rules: Rule[], update: Update): boolean => {
   return true;
 };
 
+const withCorrectedOrder = (rules: Rule[], update: Update): Update => {
+  return update.reduce((result, page) => {
+    if (result.length === 0) {
+      return [page];
+    }
+
+    for (let i = 0; i <= result.length; i++) {
+      const copy = result.slice();
+      copy.splice(i, 0, page);
+
+      if (isCorrectlyOrdered(rules, copy)) {
+        return copy;
+      }
+    }
+
+    throw new Error("Could not place page");
+  }, []);
+};
+
 console.log(
   "Problem one:",
-  sum(
-    middlePages(updates.filter((update) => isCorrectlyOrdered(rules, update))),
-  ),
+
+  updates
+    .filter((update) => isCorrectlyOrdered(rules, update))
+    .map(middlePage)
+    .reduce((sum, num) => sum + num, 0),
+);
+
+console.log(
+  "Problem two:",
+
+  updates
+    .filter((update) => !isCorrectlyOrdered(rules, update))
+    .map((update) => withCorrectedOrder(rules, update))
+    .map(middlePage)
+    .reduce((sum, num) => sum + num, 0),
 );
