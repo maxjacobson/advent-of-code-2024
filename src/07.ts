@@ -64,3 +64,41 @@ console.log(
     .map((equation) => equation.testValue)
     .reduce((sum, num) => sum + num, 0),
 );
+
+////// part two
+
+const matchesPartTwo = (
+  equation: Equation,
+  { value, idx }: { value: number; idx: number },
+): boolean => {
+  const nextValue = equation.calibrationEquation[idx];
+
+  if (nextValue) {
+    const values = [
+      value * nextValue,
+      value + nextValue,
+      parseInt(`${value}${nextValue}`),
+    ];
+
+    return values.some((value) => {
+      return matchesPartTwo(equation, { value, idx: idx + 1 });
+    });
+  } else {
+    return value === equation.testValue;
+  }
+};
+
+const possiblyTruePartTwo = (equation: Equation): boolean => {
+  return matchesPartTwo(equation, {
+    value: equation.calibrationEquation[0],
+    idx: 1,
+  });
+};
+
+console.log(
+  "Problem two:",
+  equations
+    .filter((equation) => possiblyTruePartTwo(equation))
+    .map((equation) => equation.testValue)
+    .reduce((sum, num) => sum + num, 0),
+);
