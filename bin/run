@@ -6,15 +6,15 @@ set -e
 
 usage() {
   cat <<'EOM'
-Usage: run [-rh] [--] <PROBLEM>
-Run problems
+Usage: run [-rh] [--] <puzzle>
+Run puzzles
 
 Options:
   -r            Use the real input instead of the example input
   -h            Show this help
 
 Arguments:
-  PROBLEM         Which problem to run
+  PUZZLE         Which puzzle to run
 
 EOM
 }
@@ -40,17 +40,17 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -eq 0 ]; then
-  echo "At least one problem is required" >&2
+  echo "At least one puzzle is required" >&2
   usage >&2
   exit 64
 fi
 
 tsc
 
-for problem in "$@"; do
+for puzzle in "$@"; do
   if [ "$real" -ne 1 ]; then
-    node "dist/$problem.js" "inputs/$problem.example.txt"
+    node "dist/$puzzle.js" "inputs/$puzzle.example.txt"
   else
-    node "dist/$problem.js" "inputs/$problem.real.txt"
+    node "dist/$puzzle.js" "inputs/$puzzle.real.txt"
   fi
 done

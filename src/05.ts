@@ -64,7 +64,7 @@ const withCorrectedOrder = (rules: Rule[], update: Update): Update => {
 };
 
 console.log(
-  "Problem one:",
+  "Part one:",
 
   updates
     .filter((update) => isCorrectlyOrdered(rules, update))
@@ -73,7 +73,7 @@ console.log(
 );
 
 console.log(
-  "Problem two:",
+  "Part two:",
 
   updates
     .filter((update) => !isCorrectlyOrdered(rules, update))
